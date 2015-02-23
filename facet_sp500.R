@@ -7,16 +7,20 @@
 args <- commandArgs(trailingOnly=TRUE)
 
 if(length(args) < 1) {
-    print("usage: Rscript facet_sp500.R facet [reverse]")
-    print("  e.g. Rscript facet_sp500.R Market.Cap true")
+    print("usage: Rscript facet_sp500.R facet [reverse] [plot]")
+    print("  e.g. Rscript facet_sp500.R Market.Cap true true")
     quit()
 }
 
 facet = args[1]
-reverse = T
 ## by default, reverse sort unless otherwise specified
+reverse = T
 if(length(args) == 2) 
     reverse <- args[2] == "true"
+## by default, don't generate plot unless otherwise specified
+doPlot = F
+if(length(args) == 3) 
+    doPlot <- args[3] == "true"
 
 ## load the data source
 dsource = "http://data.okfn.org/data/core/s-and-p-500-companies/r/constituents-financials.csv"
@@ -47,4 +51,13 @@ columns = colnames(sp.detail)
 index = match(facet, columns)
 summary <- subset(byFacet, select = c(Name, index))
 summary
+
+
+if(doPlot) {
+    cat("generating plot to Rplot.pdf.. ")
+    lbls = byFacet$Name
+    slices = byFacet[, index]
+    pie(slices, labels = lbls, main = paste("Top Constituents by ", facet))
+    cat("done\n")
+}
 

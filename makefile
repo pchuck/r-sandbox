@@ -13,5 +13,8 @@ start_console:
 
 # find top s&p 500 constituents by specified facet
 #
-facet:
-	Rscript facet_sp500.R EBITDA 
+facet_ebitda:
+	Rscript facet_sp500.R EBITDA true true
+
+facet_marketcap:
+	Rscript facet_sp500.R Market.Cap true false
