@@ -4,6 +4,7 @@
 ##   accepts a facet of interest
 ##   and returns the top-ranked securities based on that attribute
 ##
+SRC = "http://data.okfn.org/data/core/s-and-p-500-companies/r/constituents-financials.csv"
 args <- commandArgs(trailingOnly=TRUE)
 
 if(length(args) < 1) {
@@ -23,9 +24,12 @@ if(length(args) == 3)
     doPlot <- args[3] == "true"
 
 ## load the data source
-dsource = "http://data.okfn.org/data/core/s-and-p-500-companies/r/constituents-financials.csv"
-sp.detail <- read.csv(dsource, sep=",", header=1)
+loadFinancialData <- function(src) { 
+    sp.detail <- read.csv(src, sep=",", header=1)
+    sp.detail
+}
 
+## sort and return the constituents by the specified facet
 sortByFacet <- function(sp.data, facet, reverse) {
     ## locate the column of interest
     columns = colnames(sp.data)
@@ -43,6 +47,20 @@ sortByFacet <- function(sp.data, facet, reverse) {
     byFacet
 }
 
+## generate a plot of the top constituents share of the facet
+plotFacetShare <- function(faceted, facet, index) {
+    lbls = faceted$Name
+    slices = faceted[, index]
+    pie(slices, labels = lbls, main = paste("Top Constituents by ", facet))
+}
+
+
+##
+## main
+
+## load the data from the source into a data frame
+sp.detail <- loadFinancialData(SRC)
+    
 ## extract the sorted data by facet
 byFacet <- sortByFacet(sp.detail, facet, reverse)
 
@@ -52,12 +70,10 @@ index = match(facet, columns)
 summary <- subset(byFacet, select = c(Name, index))
 summary
 
-
+## plot
 if(doPlot) {
-    cat("generating plot to Rplot.pdf.. ")
-    lbls = byFacet$Name
-    slices = byFacet[, index]
-    pie(slices, labels = lbls, main = paste("Top Constituents by ", facet))
+    cat("\ngenerating plot to Rplot.pdf.. ")
+    plotFacetShare(byFacet, facet, index)
     cat("done\n")
 }
 
