@@ -1,3 +1,5 @@
+#! /usr/bin/env Rscript
+#
 ## faceted search, correlation and plot of s&p 500 constituents
 ## utilizes data from data.okfn.org
 ##
@@ -24,7 +26,7 @@ if(length(args) == 3)
     doPlot <- args[3] == "true"
 
 ## load the data source
-loadFinancialData <- function(src) { 
+loadFinancialData <- function(src) {
     sp.detail <- read.csv(src, sep=",", header=1)
     sp.detail
 }
