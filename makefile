@@ -3,7 +3,8 @@
 
 # tmux a complete r environment
 create_env:
-	scripts/r-dev-tmux.sh work r-dev
+#	scripts/r-dev-tmux.sh work r-dev
+	tmuxinator start r-sandbox
 
 # start r
 start_console:

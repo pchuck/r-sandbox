@@ -2,7 +2,9 @@
 # 
 # tmux script to initialize r dev environment 
 #
-
+# deprecated
+#   use tmuxinator instead. see: 'make create_env'
+#
 if [ "$#" -lt 2 ]; then
   echo "Usage: $0 session_name window" >&2
   echo "  e.g. $0 work r-dev" >&2
@@ -36,4 +38,3 @@ tmux send-keys -t $SESSION:$WINDOW.1 'ls' 'C-m'
 
 # attach to the session
 tmux attach -t $SESSION 
-
